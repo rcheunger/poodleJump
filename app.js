@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
+    const bgTwo = document.querySelector('.bgTwo')
     const poodle = document.createElement('div')
     let poodleLeftSpace = 50
     let startPoint = 150
@@ -108,17 +109,25 @@ document.addEventListener('DOMContentLoaded', () => {
         },30)
     }
 
+    function newBackGround (element,background) {
+        element.style.backgroundImage = "url("+background+")";
+     }
+    
+
     function gameOver() {
         console.log('Game Over')
         isGameOver = true
+        newBackGround (grid, "/eee.gif")
         while (grid.firstChild) {
             grid.removeChild(grid.firstChild)
         }
+
         grid.innerHTML = score
         clearInterval(upTimerId)
         clearInterval(downTimerId)
         clearInterval(leftTimerId)
         clearInterval(rightTimerId)
+
     }
 
     function control(e) {
