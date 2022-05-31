@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
-    const bgTwo = document.querySelector('.bgTwo')
     const poodle = document.createElement('div')
+    const btn = document.createElement('button')
     let poodleLeftSpace = 50
     let startPoint = 150
     let poodleBottomSpace = startPoint
@@ -109,15 +109,32 @@ document.addEventListener('DOMContentLoaded', () => {
         },30)
     }
 
-    function newBackGround (element,background) {
-        element.style.backgroundImage = "url("+background+")";
-     }
-    
+    function newBackGround (element, background) {
+        element.style.background = "yellow url("+background+") 50%";
+    }
+
+    function restart () {
+        btn.innerHTML = "EEEEEEEEE";
+        btn.style.background = "black";
+        btn.style.color = "white";
+        btn.style.fontWeight = "bold";
+        btn.style.fontSize = "18px";
+        btn.style.margin = "10px"
+        btn.style.marginLeft = "135px";
+        btn.style.padding = "5px"
+        btn.style.borderRadius = "5px"
+        document.body.appendChild(btn);
+        btn.addEventListener("click", restart);
+        function restart() {
+            window.location.reload();
+        }
+    }
 
     function gameOver() {
         console.log('Game Over')
         isGameOver = true
         newBackGround (grid, "/eee.gif")
+        restart()
         while (grid.firstChild) {
             grid.removeChild(grid.firstChild)
         }
@@ -127,8 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(downTimerId)
         clearInterval(leftTimerId)
         clearInterval(rightTimerId)
-
     }
+    
+    
 
     function control(e) {
         if (e.key === "ArrowLeft") {
@@ -185,7 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.addEventListener('keyup',control)
         }
     }
-    //attach button
+
+    
     start()
 
 })
