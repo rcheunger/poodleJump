@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
+    grid.style.display = "none"
+    const startScreen = document.querySelector('.startScreen')
     const smol = document.createElement('div')
     const btn = document.createElement('button')
     let smolLeftSpace = 50
     let startPoint = 150
     let smolBottomSpace = startPoint
-    let isGameOver = false
+    let isGameOver = true
     let platformCount = 5
     let platforms = []
     let upTimerId 
@@ -16,7 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let leftTimerId
     let rightTimerId
     let score = 0
+    let endText = "SCORE: "
+
+    startScreen.onclick = myFunction;
     
+    function myFunction() {
+        startScreen.style.display = "none";
+        grid.style.display = "block"
+        isGameOver = false
+        start ()
+    }
+   
 
     function createSmol() {
         grid.appendChild(smol)
@@ -109,11 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },30)
     }
 
+    
     function newBackGround (element, background) {
         element.style.background = "url("+background+")";
     }
-
-
 
     function gameOver() {
         console.log('Game Over')
@@ -124,9 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.removeChild(grid.firstChild)
         }
 
-        grid.innerHTML = score
+        grid.innerHTML = endText + score
         grid.style.color = "white"
-        grid.style.fontSize = 
+        grid.style.fontSize = "100px"
+        grid.style.fontFamily = "Game Over"
         clearInterval(upTimerId)
         clearInterval(downTimerId)
         clearInterval(leftTimerId)
@@ -148,8 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.reload();
         }
     }}
-    
-    
 
     function control(e) {
         if (e.key === "ArrowLeft") {
@@ -201,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function start() {
         if (!isGameOver){
+            grid.style.display = "block";
             createPlatforms()
             createSmol()
             setInterval(movePlatforms,30)
@@ -209,7 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    
     start()
 
 })

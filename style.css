@@ -8,7 +8,7 @@
     text-align: center;
 }
 
-.loadingScreen {
+.startScreen {
     width: 500px;
     height: 700px;
     background-image: url(/bg.gif);
@@ -44,3 +44,6 @@
     position: absolute;
 }
 
+.p {
+    margin: 0;
+}
