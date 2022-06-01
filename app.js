@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
-    const poodle = document.createElement('div')
+    const smol = document.createElement('div')
     const btn = document.createElement('button')
-    let poodleLeftSpace = 50
+    let smolLeftSpace = 50
     let startPoint = 150
-    let poodleBottomSpace = startPoint
+    let smolBottomSpace = startPoint
     let isGameOver = false
     let platformCount = 5
     let platforms = []
@@ -18,19 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0
     
 
-    function createPoodle() {
-        grid.appendChild(poodle)
-        poodle.classList.add('poodle')
-        poodleLeftSpace = platforms[0].left
-        poodle.style.left = poodleLeftSpace + 'px'
-        poodle.style.bottom = poodleBottomSpace + 'px'
+    function createSmol() {
+        grid.appendChild(smol)
+        smol.classList.add('smol')
+        smolLeftSpace = platforms[0].left
+        smol.style.left = smolLeftSpace + 'px'
+        smol.style.bottom = smolBottomSpace + 'px'
 
     }
    
     class Platform {
         constructor(newPlatBottom) {
             this.bottom = newPlatBottom
-            this.left = Math.random() * 315
+            this.left = Math.random() * 400
             this.visual = document.createElement('div')
 
             const visual = this.visual
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function movePlatforms() {
-        if (poodleBottomSpace > 200) {
+        if (smolBottomSpace > 200) {
             platforms.forEach(platform => {
                 platform.bottom -= 4
                 let visual = platform.visual
@@ -75,9 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(downTimerId)
         isJumping = true
         upTimerId = setInterval(function () {
-            poodleBottomSpace += 20
-            poodle.style.bottom = poodleBottomSpace + 'px'
-            if (poodleBottomSpace > startPoint + 200) {
+            smolBottomSpace += 20
+            smol.style.bottom = smolBottomSpace + 'px'
+            if (smolBottomSpace > startPoint + 200) {
                 fall()
             }
         },30)
@@ -87,21 +87,21 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(upTimerId)
         isJumping = false
         downTimerId = setInterval(function () {
-            poodleBottomSpace -= 5
-            poodle.style.bottom = poodleBottomSpace + 'px'
-            if (poodleBottomSpace <= 0) {
+            smolBottomSpace -= 5
+            smol.style.bottom = smolBottomSpace + 'px'
+            if (smolBottomSpace <= 0) {
                 gameOver()
             }
             platforms.forEach(platform => {
                 if (
-                    (poodleBottomSpace >= platform.bottom) &&
-                    (poodleBottomSpace <= platform.bottom + 15) &&
-                    ((poodleLeftSpace + 60) >= platform.left) &&
-                    (poodleLeftSpace <= (platform.left + 85)) &&
+                    (smolBottomSpace >= platform.bottom) &&
+                    (smolBottomSpace <= platform.bottom + 15) &&
+                    ((smolLeftSpace + 60) >= platform.left) &&
+                    (smolLeftSpace <= (platform.left + 85)) &&
                     !isJumping
                 ) {
                     console.log('Landed')
-                    startPoint = poodleBottomSpace
+                    startPoint = smolBottomSpace
                     jump()
                 }
             })
@@ -110,41 +110,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function newBackGround (element, background) {
-        element.style.background = "yellow url("+background+") 50%";
+        element.style.background = "url("+background+")";
     }
 
-    function restart () {
-        btn.innerHTML = "EEEEEEEEE";
-        btn.style.background = "black";
-        btn.style.color = "white";
-        btn.style.fontWeight = "bold";
-        btn.style.fontSize = "18px";
-        btn.style.margin = "10px"
-        btn.style.marginLeft = "135px";
-        btn.style.padding = "5px"
-        btn.style.borderRadius = "5px"
-        document.body.appendChild(btn);
-        btn.addEventListener("click", restart);
-        function restart() {
-            window.location.reload();
-        }
-    }
+
 
     function gameOver() {
         console.log('Game Over')
         isGameOver = true
-        newBackGround (grid, "/eee.gif")
+        newBackGround (grid, "/bg.gif")
         restart()
         while (grid.firstChild) {
             grid.removeChild(grid.firstChild)
         }
 
         grid.innerHTML = score
+        grid.style.color = "white"
+        grid.style.fontSize = 
         clearInterval(upTimerId)
         clearInterval(downTimerId)
         clearInterval(leftTimerId)
         clearInterval(rightTimerId)
-    }
+       
+        function restart () {
+            btn.innerHTML = "EEEEEEEEE";
+            btn.style.background = "black";
+            btn.style.color = "white";
+            btn.style.fontWeight = "bold";
+            btn.style.fontSize = "18px";
+            btn.style.margin = "10px"
+            btn.style.marginLeft = "185px";
+            btn.style.padding = "5px"
+            btn.style.borderRadius = "5px"
+            document.body.appendChild(btn);
+            btn.addEventListener("click", restart);
+            function restart() {
+                window.location.reload();
+        }
+    }}
     
     
 
@@ -160,29 +163,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function moveLeft() {
+        clearInterval(leftTimerId)
         if (isGoingRight) {
             clearInterval(rightTimerId)
             isGoingRight = false
         }
         isGoingLeft = true
         leftTimerId = setInterval(function () {
-            if (poodleLeftSpace >= 0) {
-                poodleLeftSpace -= 5
-                 poodle.style.left = poodleLeftSpace + 'px'
+            if (smolLeftSpace >= 0) {
+                smolLeftSpace -= 5
+                 smol.style.left = smolLeftSpace + 'px'
             } else moveRight()
         },30)
     }
 
     function moveRight() {
+        clearInterval(rightTimerId)
         if (isGoingLeft) {
             clearInterval (leftTimerId)
             isGoingLeft = false
         }
         isGoingRight = true 
         rightTimerId = setInterval(function () {
-            if (poodleLeftSpace <= 340) {
-                poodleLeftSpace += 5
-                poodle.style.left = poodleLeftSpace + 'px'
+            if (smolLeftSpace <= 440) {
+                smolLeftSpace += 5
+                smol.style.left = smolLeftSpace + 'px'
             } else moveLeft
         },30)
     }
@@ -197,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function start() {
         if (!isGameOver){
             createPlatforms()
-            createPoodle()
+            createSmol()
             setInterval(movePlatforms,30)
             jump()
             document.addEventListener('keyup',control)
