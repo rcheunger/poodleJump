@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0
     let endText = "SCORE: "
     let nftScore = 0
-    let nftScoreEndText = "NFT SCORE: "
+    let nftScoreEndText = "                 NFT SCORE: "
 
 
     startScreen.onclick = myFunction;
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         smol.style.left = smolLeftSpace + 'px'
         smol.style.bottom = smolBottomSpace + 'px'
     }
-   
+
     class Platform {
         constructor(newPlatBottom) {
             this.bottom = newPlatBottom
@@ -56,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     class NFT {
-        constructor(newPlatBottom) {
-            this.bottom = newPlatBottom
+        constructor(newNftBottom) {
+            this.bottom = newNftBottom
             this.left = Math.random() * 400
             this.visual = document.createElement('div')
 
@@ -99,10 +99,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    let nfts = [new NFT(500)]
+    function moveNFTs() {
+        if (smolBottomSpace > 200) {
+            nfts.forEach(nft => {
+                nft.bottom -= 4
+                let visual = nft.visual
+                visual.style.bottom = nft.bottom + 'px'
+
+                if (nft.bottom < 10) {
+                    let firstNft = nfts[0].visual
+                    firstNft.classList.remove('nft')
+                    nfts.shift()
+
+                    let newNft = new NFT(500)
+                    nfts.push(newNft)
+                }
+            })
+        }
+    }
+
     function jump() {
         clearInterval(downTimerId)
         isJumping = true
         upTimerId = setInterval(function () {
+            checkIfCollectNft()
             smolBottomSpace += 20
             smol.style.bottom = smolBottomSpace + 'px'
             if (smolBottomSpace > startPoint + 200) {
@@ -120,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (smolBottomSpace <= 0) {
                 gameOver()
             }
+            checkIfCollectNft()
             platforms.forEach(platform => {
                 if (
                     (smolBottomSpace >= platform.bottom) &&
@@ -133,32 +155,49 @@ document.addEventListener('DOMContentLoaded', () => {
                     jump()
                 }
             })
-
         },30)
     }
 
+    function checkIfCollectNft() {
+        let nft = nfts[0]
+        if(
+            smolBottomSpace >= nft.bottom &&
+            smolBottomSpace <= nft.bottom + 50 &&
+            ((smolLeftSpace + 50) >= nft.left) &&
+            smolLeftSpace <= nft.left + 50
+        ) {
+            console.log('collision')
+            nftScore++
+            let firstNft = nfts[0].visual
+            firstNft.classList.remove('nft')
+            nfts.shift()
+
+            let newNft= new NFT(500)
+            nfts.push(newNft)
+        }
+    }
 
     function gameOver() {
         console.log('Game Over')
         isGameOver = true
+        clearInterval(upTimerId)
+        clearInterval(downTimerId)
+        clearInterval(leftTimerId)
+        clearInterval(rightTimerId)
         startScreen.style.display = "none"
         grid.style.display = "none"
         endScreen.style.display = "block"
+        
         restart()
         while (grid.firstChild) {
             grid.removeChild(grid.firstChild)
         }
 
-        endScreen.innerHTML = endText + score 
+        endScreen.innerHTML = endText + score + nftScoreEndText + nftScore
         endScreen.style.color = "white"
         endScreen.style.fontSize = "100px"
- 
-        clearInterval(upTimerId)
-        clearInterval(downTimerId)
-        clearInterval(leftTimerId)
-        clearInterval(rightTimerId)
-       
-        goHome.onclick = restart();
+        loadImagesOfMintedNfts()
+        grid.classList.remove("hide")
 
         function restart () {
             addEventListener("click", restart);
@@ -221,11 +260,24 @@ document.addEventListener('DOMContentLoaded', () => {
             createPlatforms()
             createSmol()
             setInterval(movePlatforms,30)
+            setInterval(moveNFTs, 30)
             jump()
             document.addEventListener('keyup',control)
         }
     }
 
     start()
+
+    function loadImagesOfMintedNfts() {
+        for(let i = 1; i<= 10; i++) {
+            if(localStorage.getItem(i.toString())) {
+                console.log(`element with id ${i} is minted`)
+                const nft1 = document.getElementById(i)
+                const att = document.createAttribute("style")
+                att.value = `content:url(./nfts/${i}.png)`
+                nft1.setAttributeNode(att);
+            }
+        }
+    }
 
 })
