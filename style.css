@@ -28,6 +28,23 @@
     text-align: center;
 }
 
+
+
+.smolGif{
+    width: 150px;
+    height: 150px;
+    margin-top: 50px;
+    margin-left: 250px;
+}
+
+
+p {
+    display: inline;
+    font-size: 100px;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
 .smol {
     width: 60px;
     height: 100px;
@@ -44,6 +61,3 @@
     position: absolute;
 }
 
-.p {
-    margin: 0;
-}

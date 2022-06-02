@@ -2,8 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
     grid.style.display = "none"
     const startScreen = document.querySelector('.startScreen')
+    const endScreen = document.querySelector('.endScreen')
+    endScreen.style.display = "none"
     const smol = document.createElement('div')
-    const btn = document.createElement('button')
     let smolLeftSpace = 50
     let startPoint = 150
     let smolBottomSpace = startPoint
@@ -19,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let rightTimerId
     let score = 0
     let endText = "SCORE: "
+    let nftScore = 0
+    let nftScoreEndText = "NFT SCORE: "
+
 
     startScreen.onclick = myFunction;
     
@@ -29,14 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
         start ()
     }
    
-
     function createSmol() {
         grid.appendChild(smol)
         smol.classList.add('smol')
         smolLeftSpace = platforms[0].left
         smol.style.left = smolLeftSpace + 'px'
         smol.style.bottom = smolBottomSpace + 'px'
-
     }
    
     class Platform {
@@ -47,6 +49,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const visual = this.visual
             visual.classList.add('platform')
+            visual.style.left = this.left + 'px'
+            visual.style.bottom = this.bottom + 'px'
+            grid.appendChild(visual)
+        }
+    }
+
+    class NFT {
+        constructor(newPlatBottom) {
+            this.bottom = newPlatBottom
+            this.left = Math.random() * 400
+            this.visual = document.createElement('div')
+
+            const visual = this.visual
+            visual.classList.add('nft')
             visual.style.left = this.left + 'px'
             visual.style.bottom = this.bottom + 'px'
             grid.appendChild(visual)
@@ -121,41 +137,31 @@ document.addEventListener('DOMContentLoaded', () => {
         },30)
     }
 
-    
-    function newBackGround (element, background) {
-        element.style.background = "url("+background+")";
-    }
 
     function gameOver() {
         console.log('Game Over')
         isGameOver = true
-        newBackGround (grid, "/bg.gif")
+        startScreen.style.display = "none"
+        grid.style.display = "none"
+        endScreen.style.display = "block"
         restart()
         while (grid.firstChild) {
             grid.removeChild(grid.firstChild)
         }
 
-        grid.innerHTML = endText + score
-        grid.style.color = "white"
-        grid.style.fontSize = "100px"
-        grid.style.fontFamily = "Game Over"
+        endScreen.innerHTML = endText + score 
+        endScreen.style.color = "white"
+        endScreen.style.fontSize = "100px"
+ 
         clearInterval(upTimerId)
         clearInterval(downTimerId)
         clearInterval(leftTimerId)
         clearInterval(rightTimerId)
        
+        goHome.onclick = restart();
+
         function restart () {
-            btn.innerHTML = "EEEEEEEEE";
-            btn.style.background = "black";
-            btn.style.color = "white";
-            btn.style.fontWeight = "bold";
-            btn.style.fontSize = "18px";
-            btn.style.margin = "10px"
-            btn.style.marginLeft = "185px";
-            btn.style.padding = "5px"
-            btn.style.borderRadius = "5px"
-            document.body.appendChild(btn);
-            btn.addEventListener("click", restart);
+            addEventListener("click", restart);
             function restart() {
                 window.location.reload();
         }
